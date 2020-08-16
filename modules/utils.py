@@ -13,10 +13,21 @@ def tanh(x):
 def tanh_derivatif(x):
     return 1.0 - np.square(np.tanh(x))
 
+def relu(x):
+    return x * (x > 0)
 
-# Loss
-def logloss(y, a):
-    return -(y * np.log(a) + (1.0 - y) * np.log(1.0 - a))
+def relu_derivatif(x):
+    return 1 * (x > 0)
 
-def logloss_derivatif(y, a):
-    return (a - y) / (np.matmul(a, (1.0 - a)))
+# # Loss
+# def logloss(y, a):
+#     return -(y * np.log(a) + (1.0 - y) * np.log(1.0 - a))
+
+# def logloss_derivatif(y, a):
+#     return (a - y) / (a * (1 - a))
+
+map_activation = {
+    'sigmoid': (sigmoid, sigmoid_derivatif),
+    'tanh': (tanh, tanh_derivatif),
+    'relu': (relu, relu_derivatif)
+}

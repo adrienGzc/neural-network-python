@@ -21,8 +21,9 @@ class Layer:
 
     def feedforward(self, A_prev):
         self.A_prev = A_prev
-        # print(self.__weights.shape, A_prev.shape)
+        print(self.__weights.shape, self.A_prev.shape)
         self.Z = np.dot(self.__weights, self.A_prev) + self.__bias
+        print('Z: ', self.Z.shape)
         self.A = self.__activation(self.Z)
         return self.A
     

@@ -18,35 +18,32 @@ def load_dataset(datasetWanted):
     return train_test_split(preprocessing.normalize(tmp['data']),
         tmp['target'], test_size=0.30, random_state=42)
 
-
 def main(params):
-    X_train, X_test, Y_train, Y_test = load_dataset(params['dataset'])
-    # X_train = np.array([[0, 0, 0, 1], [0, 0, 1, 1], [0, 1, 0, 1]])
+    X_train, _X_test, Y_train, _Y_test = load_dataset(params['dataset'])
+    # X_train = np.array([[0, 0, 1, 1], [0, 1, 0, 1]])
     # Y_train = np.array([[0, 1, 1, 0]])
-
-    # m = 4
+    # test = np.array([Y_train])
     epochs = int(params['epochs'])
 
-    layers = [Layer.Layer(105, 32, 'tanh'),
-        Layer.Layer(32, 16, 'sigmoid'),
-        Layer.Layer(16, 3, 'sigmoid')
-    ]
-    # costs = []
+    layers = [Layer.Layer(105, 4, 'sigmoid'), Layer.Layer(4, 3, 'sigmoid')]
+    # layers = [Layer.Layer(2, 3, 'tanh'), Layer.Layer(3, 1, 'sigmoid')]
 
     for _epoch in range(epochs):
         # Feedforward
         A = X_train
+        print('HERE: ', X_train.shape)
         for layer in layers:
             A = layer.feedforward(A)
+            print(A.shape)
 
         # Calulate cost to plot graph
         # cost = 1 / m * np.sum(utils.logloss(Y_training, A))
         # costs.append(cost)
 
         # Backpropagation
-        xx = 1.0 - A
-        print(xx.shape, A.shape)
+        print('BACK: ', Y_train.shape, A.shape)
         dA = utils.logloss_derivatif(Y_train, A)
+        print('DA: ', dA.shape)
         for layer in reversed(layers):
             dA = layer.backprop(dA)
 
@@ -58,8 +55,8 @@ def main(params):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--dataset", required=False, help="Dataset wanted.")
-    parser.add_argument("-e", "--epochs", required=False, help="Number of epochs.")
+    parser.add_argument("-d", "--dataset", required=True, help="Dataset wanted.")
+    parser.add_argument("-e", "--epochs", required=True, help="Number of epochs.")
     parser.add_argument("-n", "--neurons", required=False, nargs="+", help="Number of neurons in each layer.")
     params = vars(parser.parse_args())
 
